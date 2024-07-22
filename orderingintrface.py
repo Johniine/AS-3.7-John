@@ -21,6 +21,8 @@ courier = ("Courier", 17, "bold")
 header_courier = ("Courier", 20, "bold")
 sub_head_courier = ("Courier", 12, "bold")
 
+# List
+selected_list = []
 # Class
 class Order:
     def __init__(self) -> None:
@@ -28,10 +30,10 @@ class Order:
         self.background_frame3 = Frame(
             window3,width=481, height=443,bg=light_green,borderwidth=1,relief=SOLID
             )
-        self.background_frame3.grid(padx=5,pady=5,column=0,row=0)
+        self.background_frame3.grid(padx=2,pady=5,column=0,row=0)
 
         self.background_frame4 = Frame(
-            width=189, height=443, bg=light_yellow, borderwidth=1, relief=SOLID
+            width=180, height=443, bg=light_yellow, borderwidth=1, relief=SOLID
             )
         self.background_frame4.grid(padx=0,pady=0,column=1,row=0)
 
@@ -102,10 +104,10 @@ class Order:
             self.background_frame4,bg=light_red,text="Error Message",
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=5
             )
-        self.error_label.grid(padx=3,pady=3)
+        self.error_label.grid(padx=3,pady=4)
 
         self.total_label = Label(
-            self.background_frame4,bg=light_peach,text="Error Message",
+            self.background_frame4,bg=light_peach,text="Total",
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=2
             )
         self.total_label.grid(padx=3,pady=2)
@@ -115,6 +117,25 @@ class Order:
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17
         )
         self.calculate_buttons.grid(padx=3,pady=2)
+
+        self.proceed_button = Button(
+            self.background_frame4,bg=light_cornflower_blue,text="Proceed",
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17
+        )
+        self.proceed_button.grid(padx=3,pady=2)
+
+        self.list_label = Label(
+            self.background_frame4,textvariable=selected_list,
+            bg=light_peach,font=sub_head_courier,borderwidth=1,relief=SOLID,
+            width=17,height=8
+        )
+        self.list_label.grid(padx=3,pady=2)
+
+        self.cancel_button = Button(
+            self.background_frame4,text="Cancel Order",bg=light_red,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17
+        )
+        self.cancel_button.grid(padx=3,pady=3)
 
 # Main Program
 
