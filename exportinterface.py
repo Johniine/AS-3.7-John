@@ -77,19 +77,19 @@ class Export:
 
         self.name_label = Label(
             self.background_frame5,text="Enter Name:",bg=light_yellow,
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23,height=1
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
         )
         self.name_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=4)
 
         self.address_label = Label(
-            self.background_frame5,text="Enter Name:",bg=light_yellow,
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23,height=1
+            self.background_frame5,text="Enter Address:",bg=light_yellow,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
         )
         self.address_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=5)
 
         self.phone_label = Label(
-            self.background_frame5,text="Enter Name:",bg=light_yellow,
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23,height=1
+            self.background_frame5,text="Enter Phone:",bg=light_yellow,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
         )
         self.phone_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=6)
 
@@ -114,13 +114,16 @@ class Export:
         )
         self.number_entry.grid(ipadx=4,ipady=3,padx=2,pady=2,column=1,row=6,sticky="E")
 
+        # Buttons
         self.export_button = Button(
-            self.background_frame5,text=" Start Ordering ",font=courier,width=16,borderwidth=1,relief=SOLID,bg=light_cornflower_blue
+            self.background_frame5,text=" Export ",font=sub_head_courier,width=23,borderwidth=1,relief=SOLID,
+            bg=light_cornflower_blue
             )
         self.export_button.grid(row=7,sticky="W",padx=4,pady=5,column=0)
 
         self.back_button = Button(
-            self.background_frame5,text=" Help/Info ",font=courier,width=16,borderwidth=1,relief=SOLID,bg=light_magenta
+            self.background_frame5,text=" Back ",font=sub_head_courier,width=23,borderwidth=1,relief=SOLID,
+            bg=light_magenta
             )
         self.back_button.grid(row=7,sticky="E",padx=4,pady=5,column=1)
 
