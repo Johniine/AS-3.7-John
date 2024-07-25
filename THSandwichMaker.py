@@ -1,9 +1,12 @@
 """
 Author: John Eric Ragos
-Purpose: To create a GUI for the starting interface
+Purpose: To create a program that allows the user to build and name their sandwich.
 Date: 25/06/2024
-Version 1: Create a GUI for the starting interface
+Version 1: Created a GUI for the starting interface
+Version 2: Created a GUI for the ordering interface
+Version 3: Created a GUI for the help interface
 """
+
 # Imports
 from tkinter import *
 
@@ -34,29 +37,30 @@ sub_head_courier = ("Courier", 12, "bold")
 info_courier = ("Courier", 10, "bold")
 
 # List
-selected_list = []
+selected_list = [
+    
+]
 
 # Class
 class Start:
     def __init__(self) -> None:
-        global image, image_name
         # This is the teal green background for the starting interface
         self.background_frame1 = Frame(
-            root,width=481, height=443,bg=light_green,borderwidth=1,relief=SOLID
+            window1,width=481, height=443,bg=light_green,borderwidth=1,relief=SOLID
             )
         self.background_frame1.grid(padx=5,pady=5)
         # Header for the starting interface
-        self.top_text_frame1 = Label(
+        self.header1 = Label(
             self.background_frame1,bg=light_yellow,text="The Honoured Sandwich Maker",
             font=header_courier,width=30,borderwidth=1,relief=SOLID
             )
-        self.top_text_frame1.grid(padx=3,pady=5)
+        self.header1.grid(padx=3,pady=5)
         # Subheader for the starting interface
-        self.top_text_frame2 = Label(
+        self.subheader1 = Label(
             self.background_frame1,bg=light_yellow,text="Sandwich that alone is an honoured one",
             font=sub_head_courier,width=48,borderwidth=1,relief=SOLID
             )
-        self.top_text_frame2.grid(padx=3,pady=0)
+        self.subheader1.grid(padx=3,pady=0)
         # Starting interface image
         self.image_label_frame = Label(
             self.background_frame1,image=image_name,justify=CENTER
@@ -77,7 +81,6 @@ class Start:
 
 class Help:
     def __init__(self) -> None:
-        global root
         create_help_window()
         # This is the teal green background for the starting interface
         self.background_frame2 = Frame(
@@ -85,17 +88,17 @@ class Help:
             )
         self.background_frame2.grid(padx=5,pady=5)
         # Header for the starting interface
-        self.top_text_frame1 = Label(
+        self.header2 = Label(
             self.background_frame2,bg=light_yellow,text="The Honoured Sandwich Maker",
             font=header_courier,width=30,borderwidth=1,relief=SOLID
             )
-        self.top_text_frame1.grid(padx=3,pady=5)
+        self.header2.grid(padx=3,pady=5)
         # Subheader for the starting interface
-        self.top_text_frame2 = Label(
+        self.subheader2 = Label(
             self.background_frame2,bg=light_yellow,text="Info",
             font=sub_head_courier,width=48,borderwidth=1,relief=SOLID
             )
-        self.top_text_frame2.grid(padx=3,pady=0)
+        self.subheader2.grid(padx=3,pady=0)
         # Main Information
         self.main_information = Label(
             self.background_frame2,bg=light_yellow,text=info,
@@ -112,7 +115,6 @@ class Help:
 
 class Order:
     def __init__(self) -> None:
-        global root
         create_order_window()
         # This is the teal green background for the starting interface
         self.background_frame3 = Frame(
@@ -127,18 +129,18 @@ class Order:
 
         # 1st Frame labels, images, and buttons
         # Header for the starting interface
-        self.top_text_frame1 = Label(
+        self.header3 = Label(
             self.background_frame3,bg=light_peach,text="Honoured Sandwich Online",
             font=header_courier,width=31,borderwidth=1,relief=SOLID
             )
-        self.top_text_frame1.grid(padx=3,pady=5,columnspan=3)
+        self.header3.grid(padx=3,pady=5,columnspan=3)
 
         # Subheader for the starting interface
-        self.top_text_frame2 = Label(
+        self.subheader3 = Label(
             self.background_frame3,bg=light_yellow,text="Bring out 120% of the sandwich flavourness",
             font=sub_head_courier,width=49,borderwidth=1,relief=SOLID
             )
-        self.top_text_frame2.grid(padx=3,pady=0,columnspan=3)
+        self.subheader3.grid(padx=3,pady=0,columnspan=3)
 
         # Ordering interface images
         self.image_label_frame1 = Label(
@@ -208,7 +210,7 @@ class Order:
 
         self.proceed_button = Button(
             self.background_frame4,bg=light_cornflower_blue,text="Proceed",
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,command=Export
         )
         self.proceed_button.grid(padx=3,pady=2)
 
@@ -226,25 +228,123 @@ class Order:
         )
         self.cancel_button.grid(padx=3,pady=3)
 
+class Export:
+    def __init__(self) -> None:
+        create_export_window()
+        # Background frames
+        self.background_frame5 = Frame(
+            window4,width=481,height=443,bg=light_green,borderwidth=1,relief=SOLID
+            )
+        self.background_frame5.grid(padx=2,pady=5)
+
+        # Label
+        self.header4 = Label(
+            self.background_frame5,text="The Honoured Sandwich Maker",font=header_courier,
+            bg=light_yellow,width=30,borderwidth=1,relief=SOLID
+        )
+        self.header4.grid(ipadx=4,ipady=10,padx=2,pady=2,columnspan=3)
+
+        self.subheader4 = Label(
+            self.background_frame5,bg=light_yellow,text="Receipt",
+            font=sub_head_courier,width=48,borderwidth=1,relief=SOLID
+        )
+        self.subheader4.grid(ipadx=4,ipady=3,padx=2,pady=2,columnspan=3)
+
+        self.subheader5 = Label(
+            self.background_frame5,text="Enter Sandwich Name:",bg=light_yellow,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.subheader5.grid(ipadx=4,ipady=3,padx=2,pady=2,column=0,row=2,sticky="W")
+
+        self.list_label2 = Label(
+            self.background_frame5,text="",
+            bg=light_peach,font=sub_head_courier,borderwidth=1,relief=SOLID,
+            width=23,height=7
+        )
+        self.list_label2.grid(ipadx=4,ipady=3,padx=2,pady=2,column=0,row=3,sticky="W")
+
+        self.error_label = Label(
+            self.background_frame5,text="Error Message",bg=light_red,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23,height=7
+        )
+        self.error_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=1,row=3,sticky="E")
+
+        self.name_label = Label(
+            self.background_frame5,text="Enter Name:",bg=light_yellow,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.name_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=4)
+
+        self.address_label = Label(
+            self.background_frame5,text="Enter Address:",bg=light_yellow,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.address_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=5)
+
+        self.phone_label = Label(
+            self.background_frame5,text="Enter Phone:",bg=light_yellow,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.phone_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=6)
+
+        # Entries
+        self.sandwich_name = Entry(
+            self.background_frame5,font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.sandwich_name.grid(ipadx=4,ipady=3,padx=2,pady=2,column=1,row=2,sticky="E")
+
+        self.name_entry = Entry(
+            self.background_frame5,font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.name_entry.grid(ipadx=4,ipady=3,padx=2,pady=2,column=1,row=4,sticky="E")
+
+        self.address_entry = Entry(
+            self.background_frame5,font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.address_entry.grid(ipadx=4,ipady=3,padx=2,pady=2,column=1,row=5,sticky="E")
+
+        self.number_entry = Entry(
+            self.background_frame5,font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
+        )
+        self.number_entry.grid(ipadx=4,ipady=3,padx=2,pady=2,column=1,row=6,sticky="E")
+
+        # Buttons
+        self.export_button = Button(
+            self.background_frame5,text=" Export ",font=sub_head_courier,width=23,borderwidth=1,relief=SOLID,
+            bg=light_cornflower_blue
+            )
+        self.export_button.grid(row=7,sticky="W",padx=4,pady=5,column=0)
+
+        self.back_button = Button(
+            self.background_frame5,text=" Back ",font=sub_head_courier,width=23,borderwidth=1,relief=SOLID,
+            bg=light_magenta,command=close_export
+            )
+        self.back_button.grid(row=7,sticky="E",padx=4,pady=5,column=1)
+
 # Functions
 # Functions that closes a window
 
 def close_help():
     '''Closes the help window'''
-    root.deiconify()
+    window1.deiconify()
     window2.withdraw()
 
 def close_order():
     '''Closes the order window'''
-    root.deiconify()
+    window1.deiconify()
     window3.withdraw()
+
+def close_export():
+    '''Closes the export window'''
+    window3.deiconify()
+    window4.withdraw()
 
 # Functions that create a window
 def create_help_window():
     '''Create the help window and closes the start window'''
-    global window2, root
+    global window2
 
-    root.withdraw()
+    window1.withdraw()
 
     window2 = Toplevel()
     window2.title("Help Interface")
@@ -254,9 +354,9 @@ def create_help_window():
 
 def create_order_window():
     '''create the ordering window and closes the start window'''
-    global window3, root
+    global window3
 
-    root.withdraw()
+    window1.withdraw()
 
     window3 = Toplevel()
     window3.title("Order Interface")
@@ -264,14 +364,26 @@ def create_order_window():
     window3.geometry("700x418")
     window3.resizable(0,0)
 
+def create_export_window():
+    '''create the export window and closes the start window'''
+    global window4
+
+    window3.withdraw()
+
+    window4 = Toplevel()
+    window4.title("Export Interface")
+    window4.configure(bg=light_peach)
+    window4.geometry("503x418")
+    window4.resizable(0,0)
+
 # Main Program
 
 # Adjusted the window2 to make it not resizable for future proofing
-root = Tk()
-root.title("Main Interface")
-root.configure(bg=light_peach)
-root.geometry("503x418")
-root.resizable(0,0)
+window1 = Tk()
+window1.title("Main Interface")
+window1.configure(bg=light_peach)
+window1.geometry("503x418")
+window1.resizable(0,0)
 
 # Loading the images
 image = "images\HSImage2.gif"
@@ -287,4 +399,4 @@ image_name3 = PhotoImage(file=image3)
 Start()
 
 # Start the mainloop
-root.mainloop()
+window1.mainloop()
