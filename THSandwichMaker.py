@@ -9,6 +9,7 @@ Version 3: Created a GUI for the help interface
 
 # Imports
 from tkinter import *
+from tkinter import ttk
 
 # info text
 info = """
@@ -40,6 +41,9 @@ info_courier = ("Courier", 10, "bold")
 selected_list = [
     
 ]
+bread = ["Wholemeal","White","Cheesy White","Gluten Free"]
+meat = ["None","Chicken","Beef","Salami","Vegan Slice"]
+garnish = ["None","Onion","Tomato","Lettuce","Cheese"]
 
 # Class
 class Start:
@@ -118,29 +122,22 @@ class Order:
         create_order_window()
         # This is the teal green background for the starting interface
         self.background_frame3 = Frame(
-            window3, width=481, height=443,bg=light_green,borderwidth=1,relief=SOLID
+            window3,width=481, height=443,bg=light_green,borderwidth=1,relief=SOLID
             )
         self.background_frame3.grid(padx=2,pady=5,column=0,row=0)
 
         self.background_frame4 = Frame(
-            window3, width=180, height=443, bg=light_yellow, borderwidth=1, relief=SOLID
+            window3,width=180, height=443, bg=light_yellow, borderwidth=1, relief=SOLID
             )
         self.background_frame4.grid(padx=0,pady=0,column=1,row=0)
 
         # 1st Frame labels, images, and buttons
-        # Header for the starting interface
-        self.header3 = Label(
-            self.background_frame3,bg=light_peach,text="Honoured Sandwich Online",
-            font=header_courier,width=31,borderwidth=1,relief=SOLID
-            )
-        self.header3.grid(padx=3,pady=5,columnspan=3)
-
-        # Subheader for the starting interface
-        self.subheader3 = Label(
+        # header for the starting interface
+        self.top_text_frame2 = Label(
             self.background_frame3,bg=light_yellow,text="Bring out 120% of the sandwich flavourness",
             font=sub_head_courier,width=49,borderwidth=1,relief=SOLID
             )
-        self.subheader3.grid(padx=3,pady=0,columnspan=3)
+        self.top_text_frame2.grid(padx=3,pady=3,columnspan=3)
 
         # Ordering interface images
         self.image_label_frame1 = Label(
@@ -173,21 +170,61 @@ class Order:
             self.background_frame3,text="Garnish",bg=light_cornflower_blue,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID
         )
         self.garnish_label.grid(padx=5,pady=5,row=2,column=2)
-        # Ordering Menu Buttons
-        self.bread_button = Button(
-            self.background_frame3,text="Continue",bg=light_peach,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID
-        )
-        self.bread_button.grid(padx=5,pady=5,row=5,column=0)
 
-        self.meat_button = Button(
-            self.background_frame3,text="Continue",bg=light_peach,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID
-        )
-        self.meat_button.grid(padx=5,pady=5,row=5,column=1)
+        # Combo box
+        self.chosen_bread = StringVar()
+        self.chosen_bread.set("")
 
-        self.garnish_button = Button(
-            self.background_frame3,text="Continue",bg=light_peach,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID
+        self.chosen_meat1 = StringVar()
+        self.chosen_meat1.set("")
+
+        self.chosen_meat2 = StringVar()
+        self.chosen_meat2.set("")
+
+        self.chosen_garnish1 = StringVar()
+        self.chosen_garnish1.set("")
+
+        self.chosen_garnish2 = StringVar()
+        self.chosen_garnish2.set("")
+
+        self.chosen_garnish3 = StringVar()
+        self.chosen_garnish3.set("")
+
+        self.combobox_bread = ttk.Combobox(
+            self.background_frame3,textvariable=self.chosen_bread,state="readonly",width=22
         )
-        self.garnish_button.grid(padx=5,pady=5,row=5,column=2)
+        self.combobox_bread['values'] = bread
+        self.combobox_bread.grid(padx=3,pady=2,column=0,row=4)
+
+        self.combobox_meat1 = ttk.Combobox(
+            self.background_frame3,textvariable=self.chosen_meat1,state="readonly",width=22
+        )
+        self.combobox_meat1['values'] = meat
+        self.combobox_meat1.grid(padx=3,pady=2,column=1,row=4)
+
+        self.combobox_meat2 = ttk.Combobox(
+            self.background_frame3,textvariable=self.chosen_meat2,state="readonly",width=22
+        )
+        self.combobox_meat2['values'] = meat
+        self.combobox_meat2.grid(padx=3,pady=2,column=1,row=5)
+
+        self.combobox_garnish1 = ttk.Combobox(
+            self.background_frame3,textvariable=self.chosen_garnish1,state="readonly",width=22
+        )
+        self.combobox_garnish1['values'] = garnish
+        self.combobox_garnish1.grid(padx=3,pady=2,column=2,row=4)
+
+        self.combobox_garnish2 = ttk.Combobox(
+            self.background_frame3,textvariable=self.chosen_garnish2,state="readonly",width=22
+        )
+        self.combobox_garnish2['values'] = garnish
+        self.combobox_garnish2.grid(padx=3,pady=2,column=2,row=5)
+
+        self.combobox_garnish3 = ttk.Combobox(
+            self.background_frame3,textvariable=self.chosen_garnish3,state="readonly",width=22
+        )
+        self.combobox_garnish3['values'] = garnish
+        self.combobox_garnish3.grid(padx=3,pady=2,column=2,row=6)
 
         # 2nd frame labels, entry box and buttons
         self.error_label = Label(
@@ -210,23 +247,24 @@ class Order:
 
         self.proceed_button = Button(
             self.background_frame4,bg=light_cornflower_blue,text="Proceed",
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,command=Export
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,
+            command=Export
         )
         self.proceed_button.grid(padx=3,pady=2)
 
-        self.list_label = Label(
+        self.list_label1 = Label(
             self.background_frame4,textvariable=selected_list,
             bg=light_peach,font=sub_head_courier,borderwidth=1,relief=SOLID,
             width=17,height=8
         )
-        self.list_label.grid(padx=3,pady=2)
+        self.list_label1.grid(padx=3,pady=3)
 
         self.cancel_button = Button(
             self.background_frame4,text="Cancel Order",bg=light_red,
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,
             command=close_order
         )
-        self.cancel_button.grid(padx=3,pady=3)
+        self.cancel_button.grid(padx=3,pady=4)
 
 class Export:
     def __init__(self) -> None:
