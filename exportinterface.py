@@ -88,7 +88,7 @@ class Export:
         self.address_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=5)
 
         self.phone_label = Label(
-            self.background_frame5,text="Enter Phone:",bg=light_yellow,
+            self.background_frame5,text="Enter Sandwich Quantity:",bg=light_yellow,
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
         )
         self.phone_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=6)
@@ -126,11 +126,6 @@ class Export:
             bg=light_magenta
             )
         self.back_button.grid(row=7,sticky="E",padx=4,pady=5,column=1)
-
-
-
-
-
 
 # Main Program
 
