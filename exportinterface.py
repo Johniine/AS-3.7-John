@@ -1,8 +1,11 @@
 """
 Author: John Eric Ragos
-Purpose: To create a GUI for the starting interface
+Purpose: To create a program that allows the user to build and name their sandwich.
 Date: 25/06/2024
-Version 1: Create a GUI for the starting interface
+Version 1: Created a GUI for the starting interface
+Version 2: Created a GUI for the ordering interface
+Version 3: Created a GUI for the help interface
+Version 4: Created a GUI for the export interface
 """
 # Imports
 from tkinter import *
