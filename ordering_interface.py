@@ -52,7 +52,7 @@ class Order:
         self.background_frame3.grid(padx=2,pady=5,column=0,row=0)
 
         self.background_frame4 = Frame(
-            width=180, height=443, bg=light_yellow, borderwidth=1, relief=SOLID
+            window3,width=180, height=443, bg=light_yellow, borderwidth=1, relief=SOLID
             )
         self.background_frame4.grid(padx=0,pady=0,column=1,row=0)
 
@@ -258,14 +258,10 @@ class Order:
             total_price = 0
             self.total_label.configure(text=f"Total: ${total_price:.2f}")
             self.error_label.configure(text=f"",justify=LEFT)
-            
+
         except: # This will put an error message to the user if it encountered an error
             self.error_label.configure(text=f"Can't reset\n{order_type.title()} order",justify=LEFT)
             self.disable_proc()
-
-
-
-
 
 
 # Main Program
