@@ -23,6 +23,8 @@ info = """
  2. Name your own sandwich
  3. Order the sandwich you made
 """
+# Total
+total_price = 0
 
 # Colours
 light_green = "#D9EAD3"
@@ -40,13 +42,18 @@ sub_head_courier = ("Courier", 12, "bold")
 info_courier = ("Courier", 10, "bold")
 
 # List
-selected_list = [
-    
-]
 bread = ["Wholemeal","White","Cheesy White","Gluten Free"]
-meat = ["None","Chicken","Beef","Salami","Vegan Slice"]
-garnish = ["None","Onion","Tomato","Lettuce","Cheese"]
+meat = ["Chicken","Beef","Salami","Vegan Slice"]
+garnish1 = ["Onion","Tomato","Lettuce","Cheese"]
+garnish2 = ["None","Onion","Tomato","Lettuce","Cheese"]
+customers_order = []
 
+# The ingredient list
+ingredient_list = ""
+
+# Dictionary
+prices = {"None":0,"Wholemeal":1.00,"White":0.80,"Cheesy White":1.20,"Gluten Free":1.40,"Chicken":2.60,
+          "Beef":3.00,"Salami":4.00,"Vegan Slice":3.30,"Onion":1.69,"Tomato":1.00,"Lettuce":2.00,"Cheese":2.50}
 # Class
 class Start:
     def __init__(self) -> None:
@@ -173,6 +180,25 @@ class Order:
         )
         self.garnish_label.grid(padx=5,pady=5,row=2,column=2)
 
+        # Reset Buttons
+        self.bread_button = Button(
+            self.background_frame3,text="Reset Bread",bg=light_red,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID,
+            command=lambda:self.reset_order("bread")
+        )
+        self.bread_button.grid(padx=5,pady=1,row=6,column=0)
+
+        self.meat_button = Button(
+            self.background_frame3,text="Reset Meat",bg=light_red,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID,
+            command=lambda:self.reset_order("meat")
+        )
+        self.meat_button.grid(padx=5,pady=1,row=6,column=1)
+
+        self.garnish_button = Button(
+            self.background_frame3,text="Reset Garnish",bg=light_red,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID,
+            command=lambda:self.reset_order("garnish")
+        )
+        self.garnish_button.grid(padx=5,pady=1,row=6,column=2)
+
         # Combo box
         self.chosen_bread = StringVar()
         self.chosen_bread.set("")
@@ -180,17 +206,11 @@ class Order:
         self.chosen_meat1 = StringVar()
         self.chosen_meat1.set("")
 
-        self.chosen_meat2 = StringVar()
-        self.chosen_meat2.set("")
-
         self.chosen_garnish1 = StringVar()
         self.chosen_garnish1.set("")
 
         self.chosen_garnish2 = StringVar()
         self.chosen_garnish2.set("")
-
-        self.chosen_garnish3 = StringVar()
-        self.chosen_garnish3.set("")
 
         self.combobox_bread = ttk.Combobox(
             self.background_frame3,textvariable=self.chosen_bread,state="readonly",width=22
@@ -204,58 +224,47 @@ class Order:
         self.combobox_meat1['values'] = meat
         self.combobox_meat1.grid(padx=3,pady=2,column=1,row=4)
 
-        self.combobox_meat2 = ttk.Combobox(
-            self.background_frame3,textvariable=self.chosen_meat2,state="readonly",width=22
-        )
-        self.combobox_meat2['values'] = meat
-        self.combobox_meat2.grid(padx=3,pady=2,column=1,row=5)
-
         self.combobox_garnish1 = ttk.Combobox(
             self.background_frame3,textvariable=self.chosen_garnish1,state="readonly",width=22
         )
-        self.combobox_garnish1['values'] = garnish
+        self.combobox_garnish1['values'] = garnish1
         self.combobox_garnish1.grid(padx=3,pady=2,column=2,row=4)
 
         self.combobox_garnish2 = ttk.Combobox(
             self.background_frame3,textvariable=self.chosen_garnish2,state="readonly",width=22
         )
-        self.combobox_garnish2['values'] = garnish
+        self.combobox_garnish2['values'] = garnish2
         self.combobox_garnish2.grid(padx=3,pady=2,column=2,row=5)
-
-        self.combobox_garnish3 = ttk.Combobox(
-            self.background_frame3,textvariable=self.chosen_garnish3,state="readonly",width=22
-        )
-        self.combobox_garnish3['values'] = garnish
-        self.combobox_garnish3.grid(padx=3,pady=2,column=2,row=6)
 
         # 2nd frame labels, entry box and buttons
         self.error_label = Label(
-            self.background_frame4,bg=light_red,text="Error Message",
+            self.background_frame4,bg=light_red,text="",
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=5
             )
-        self.error_label.grid(padx=3,pady=4)
+        self.error_label.grid(padx=3,pady=5)
 
         self.total_label = Label(
-            self.background_frame4,bg=light_peach,text="Total",
+            self.background_frame4,bg=light_peach,text="Total: $0.00",
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=2
             )
         self.total_label.grid(padx=3,pady=2)
 
-        self.calculate_buttons = Button(
+        self.calculate_button = Button(
             self.background_frame4,bg=light_green,text="Calculate",
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,
+            command=self.calculate
         )
-        self.calculate_buttons.grid(padx=3,pady=2)
+        self.calculate_button.grid(padx=3,pady=2)
 
         self.proceed_button = Button(
             self.background_frame4,bg=light_cornflower_blue,text="Proceed",
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,state=DISABLED,
             command=Export
         )
         self.proceed_button.grid(padx=3,pady=2)
 
         self.list_label1 = Label(
-            self.background_frame4,textvariable=selected_list,
+            self.background_frame4,text="",
             bg=light_peach,font=sub_head_courier,borderwidth=1,relief=SOLID,
             width=17,height=8
         )
@@ -266,10 +275,86 @@ class Order:
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,
             command=close_order
         )
-        self.cancel_button.grid(padx=3,pady=4)
+        self.cancel_button.grid(padx=3,pady=5)
+
+    # This functions will disable and enable the calculate and proceed button
+    def disable_proc(self):
+        '''This method disable the proceed button and enable the calculate button'''
+        self.proceed_button.configure(state=DISABLED)
+        self.calculate_button.configure(state=ACTIVE)
+    
+    def disable_calc(self):
+        '''This method disable the calculate button and enable the proceed button'''
+        self.proceed_button.configure(state=ACTIVE)
+        self.calculate_button.configure(state=DISABLED)
+
+    # This method get the users order and append them in a list to be user for calculation later
+    def get_order(self):
+        '''this method get the user's order and add them in a list'''
+        global customers_order
+        customers_order.append(self.chosen_bread.get())
+        customers_order.append(self.chosen_meat1.get())
+        customers_order.append(self.chosen_garnish1.get())
+        customers_order.append(self.chosen_garnish2.get())
+    
+    # This method will calculate the users order total and put them in the label
+    def calculate(self):
+        '''This method calculate the order ammount'''
+        global total_price, ingredient_list
+        self.get_order()
+        for i in customers_order:
+            try: # Removes 'None' from the list
+                customers_order.remove("None")
+            except ValueError: # This will continue the program after all 'None' string has been removed
+                try:
+                    ingredient_list = "".join([str(f"{items}\n") for items in customers_order])
+                    self.list_label1.configure(text=ingredient_list,justify=LEFT)
+                    total_price += float(prices[i])
+                    self.total_label.configure(text=f"Total: ${total_price:.2f}")
+                    self.disable_calc()
+                    self.error_label.configure(text="")
+
+                except KeyError: # Will verify if the combo-boxes are empty and will set the total to 0 and remove everything from the list
+                    self.error_label.configure(text="Please Select\nAn Order First",justify=LEFT)
+                    self.total_label.configure(text=f"Total: ${0:.2f}")
+                    customers_order.clear()
+                    self.list_label1.configure(text="")
+                    self.disable_proc()
+                    
+    # Resets methods
+    def reset_order(self,order_type):
+        '''This method reset the user's orders'''
+        global total_price
+        try:
+            if order_type == "bread": # This will reset the bread combo-box and the selected bread in the list
+                customers_order.remove(self.chosen_bread.get())
+                self.chosen_bread.set("")
+            
+            elif order_type == "meat": # This will reset the meat combo-box and the selected meat in the list
+                customers_order.remove(self.chosen_meat1.get())
+                self.chosen_meat1.set("")
+            
+            elif order_type == "garnish": # This will reset the garnish combo-box and the selected garnish in the list
+                customers_order.remove(self.combobox_garnish1.get())
+                if self.chosen_garnish2.get() == "None": # This will check if the user have set 'None' as an option for their second sandwich and will do nothing if they have it because 'None' is already removed
+                    None
+                else:
+                    customers_order.remove(self.chosen_garnish2.get())
+
+            self.disable_proc()
+            self.ingredient_list = "".join([str(f"{items}\n") for items in customers_order])
+            self.list_label1.configure(text=self.ingredient_list,justify=LEFT)
+            total_price = 0
+            self.total_label.configure(text=f"Total: ${total_price:.2f}")
+            self.error_label.configure(text=f"",justify=LEFT)
+
+        except: # This will put an error message to the user if it encountered an error
+            self.error_label.configure(text=f"Can't reset\n{order_type.title()} order",justify=LEFT)
+            self.disable_proc()
 
 class Export:
     def __init__(self) -> None:
+        global ingredient_list
         create_export_window()
         # Background frames
         self.background_frame5 = Frame(
@@ -296,15 +381,16 @@ class Export:
         )
         self.subheader5.grid(ipadx=4,ipady=3,padx=2,pady=2,column=0,row=2,sticky="W")
 
+        self.item_total = "".join([str(f"{items}\n") for items in customers_order])
         self.list_label2 = Label(
-            self.background_frame5,text="",
+            self.background_frame5,text=f"{self.item_total}\nTotal:{total_price:.2f}",
             bg=light_peach,font=sub_head_courier,borderwidth=1,relief=SOLID,
-            width=23,height=7
+            width=23,height=7,justify=LEFT
         )
         self.list_label2.grid(ipadx=4,ipady=3,padx=2,pady=2,column=0,row=3,sticky="W")
 
         self.error_label = Label(
-            self.background_frame5,text="Error Message",bg=light_red,
+            self.background_frame5,text="",bg=light_red,
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=23,height=7
         )
         self.error_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=1,row=3,sticky="E")
@@ -322,7 +408,7 @@ class Export:
         self.address_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=5)
 
         self.phone_label = Label(
-            self.background_frame5,text="Enter Sandwich Quantity:",bg=light_yellow,
+            self.background_frame5,text="Sandwich Quantity:",bg=light_yellow,
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=23
         )
         self.phone_label.grid(ipadx=4,ipady=4,padx=2,pady=2,column=0,row=6)
@@ -371,8 +457,13 @@ def close_help():
 
 def close_order():
     '''Closes the order window'''
+    global ingredient_list, total_price, customers_order
     window1.deiconify()
     window3.withdraw()
+
+    ingredient_list = ""
+    total_price = 0
+    customers_order.clear()
 
 def close_export():
     '''Closes the export window'''
