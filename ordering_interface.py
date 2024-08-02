@@ -99,19 +99,19 @@ class Order:
         # Reset Buttons
         self.bread_button = Button(
             self.background_frame3,text="Reset Bread",bg=light_red,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID,
-            command=self.reset_bread
+            command=lambda:self.reset_order("bread")
         )
         self.bread_button.grid(padx=5,pady=1,row=6,column=0)
 
         self.meat_button = Button(
             self.background_frame3,text="Reset Meat",bg=light_red,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID,
-            command=self.reset_meat
+            command=lambda:self.reset_order("meat")
         )
         self.meat_button.grid(padx=5,pady=1,row=6,column=1)
 
         self.garnish_button = Button(
             self.background_frame3,text="Reset Garnish",bg=light_red,font=sub_head_courier,width=15,borderwidth=1,relief=SOLID,
-            command=self.reset_garnish
+            command=lambda:self.reset_order("garnish")
         )
         self.garnish_button.grid(padx=5,pady=1,row=6,column=2)
 
@@ -154,13 +154,13 @@ class Order:
 
         # 2nd frame labels, entry box and buttons
         self.error_label = Label(
-            self.background_frame4,bg=light_red,text="Error Message",
+            self.background_frame4,bg=light_red,text="",
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=5
             )
         self.error_label.grid(padx=3,pady=5)
 
         self.total_label = Label(
-            self.background_frame4,bg=light_peach,text="Total $:0.00",
+            self.background_frame4,bg=light_peach,text="Total: $0.00",
             font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=2
             )
         self.total_label.grid(padx=3,pady=2)
@@ -193,18 +193,18 @@ class Order:
 
     # This functions will disable and enable the calculate and proceed button
     def disable_proc(self):
-        '''Will disable the proceed button and enable the calculate button'''
+        '''This method disable the proceed button and enable the calculate button'''
         self.proceed_button.configure(state=DISABLED)
         self.calculate_button.configure(state=ACTIVE)
     
     def disable_calc(self):
-        '''Will disable the calculate button and enable the proceed button'''
+        '''This method disable the calculate button and enable the proceed button'''
         self.proceed_button.configure(state=ACTIVE)
         self.calculate_button.configure(state=DISABLED)
 
     # This method get the users order and append them in a list to be user for calculation later
     def get_order(self):
-        '''get the user's order and add them in a list'''
+        '''this method get the user's order and add them in a list'''
         self.customers_order = []
         self.customers_order.append(self.chosen_bread.get())
         self.customers_order.append(self.chosen_meat1.get())
@@ -213,7 +213,7 @@ class Order:
     
     # This method will calculate the users order total and put them in the label
     def calculate(self):
-        '''Calculate the order ammount'''
+        '''This method calculate the order ammount'''
         global total_price
         self.get_order()
         for i in self.customers_order:
@@ -226,6 +226,7 @@ class Order:
                     total_price += float(prices[i])
                     self.total_label.configure(text=f"Total: ${total_price:.2f}")
                     self.disable_calc()
+                    self.error_label.configure(text="")
 
                 except KeyError: # Will verify if the combo-boxes are empty and will set the total to 0 and remove everything from the list
                     self.error_label.configure(text="Please Select\nAn Order First",justify=LEFT)
@@ -235,51 +236,31 @@ class Order:
                     self.disable_proc()
                     
     # Resets methods
-    def reset_bread(self):
-        '''This will reset the bread orders'''
+    def reset_order(self,order_type):
+        '''This method reset the user's orders'''
         global total_price
         try:
-            self.customers_order.remove(self.chosen_bread.get())
-            self.chosen_bread.set("")
-            self.disable_proc()
-            self.ingredient_list = "".join([str(f"{items}\n") for items in self.customers_order])
-            self.list_label1.configure(text=self.ingredient_list,justify=LEFT)
-            total_price = 0
-            self.total_label.configure(text=f"Total: ${total_price:.2f}")
-        except: # Will verify if it will encounter any errors
-            self.error_label.configure(text="Cannot Reset\nBread Order",justify=LEFT)
-            self.disable_proc()
+            if order_type == "bread": # This will reset the bread combo-box and the selected bread in the list
+                self.customers_order.remove(self.chosen_bread.get())
+                self.chosen_bread.set("")
+            
+            elif order_type == "meat": # This will reset the meat combo-box and the selected meat in the list
+                self.customers_order.remove(self.chosen_meat1.get())
+                self.chosen_meat1.set("")
+            
+            elif order_type == "garnish": # This will reset the garnish combo-box and the selected garnish in the list
+                self.customers_order.remove(self.combobox_garnish1.get())
+                self.customers_order.remove(self.chosen_garnish2.get())
 
-    def reset_meat(self):
-        '''This will reset the meats orders'''
-        global total_price
-        try:
-            self.customers_order.remove(self.chosen_meat1.get())
-            self.chosen_meat1.set("")
             self.disable_proc()
             self.ingredient_list = "".join([str(f"{items}\n") for items in self.customers_order])
             self.list_label1.configure(text=self.ingredient_list,justify=LEFT)
             total_price = 0
             self.total_label.configure(text=f"Total: ${total_price:.2f}")
-        except: # Will verify if it will encounter any errors
-            self.error_label.configure(text="Cannot Reset\nMeat Order",justify=LEFT)
-            self.disable_proc()
-
-    def reset_garnish(self):
-        '''This will reset the meats orders'''
-        global total_price
-        try:
-            self.customers_order.remove(self.chosen_garnish1.get())
-            self.customers_order.remove(self.chosen_garnish2.get())
-            self.chosen_garnish1.set("")
-            self.chosen_garnish2.set("")
-            self.disable_proc()
-            self.ingredient_list = "".join([str(f"{items}\n") for items in self.customers_order])
-            self.list_label1.configure(text=self.ingredient_list,justify=LEFT)
-            total_price = 0
-            self.total_label.configure(text=f"Total: ${total_price:.2f}")
-        except: # Will verify if it will encounter any errors
-            self.error_label.configure(text="Cannot Reset\nGarnish Order",justify=LEFT)
+            self.error_label.configure(text=f"",justify=LEFT)
+            
+        except: # This will put an error message to the user if it encountered an error
+            self.error_label.configure(text=f"Can't reset\n{order_type.title()} order",justify=LEFT)
             self.disable_proc()
 
 
