@@ -42,6 +42,9 @@ details = []
 prices = {"None":0,"Wholemeal":1.00,"White":0.80,"Cheesy White":1.20,"Gluten Free":1.40,"Chicken":2.60,
           "Beef":3.00,"Salami":4.00,"Vegan Slice":3.30,"Onion":1.69,"Tomato":1.00,"Lettuce":2.00,"Cheese":2.50}
 
+# Hover information
+info = "Hover on the\nImage to see\nThe item prices"
+
 # Class
 class Order:
     def __init__(self) -> None:
@@ -66,19 +69,25 @@ class Order:
 
         # Ordering interface images
         self.image_label_frame1 = Label(
-            self.background_frame3,image=image_name1,borderwidth=1,relief=SOLID
+            self.background_frame3,image=image_name1,borderwidth=1,relief=SOLID,text=""
             )
         self.image_label_frame1.grid(padx=0,pady=3,row=3,column=0)
+        self.image_label_frame1.bind('<Enter>',lambda event:self.on_enter(event,image_type='bread'))
+        self.image_label_frame1.bind('<Leave>',lambda event:self.on_leave(event,image_type='bread'))
 
         self.image_label_frame2 = Label(
-            self.background_frame3,image=image_name2,borderwidth=1,relief=SOLID
+            self.background_frame3,image=image_name2,borderwidth=1,relief=SOLID,text=""
             )
         self.image_label_frame2.grid(padx=0,pady=3,row=3,column=1)
+        self.image_label_frame2.bind('<Enter>',lambda event:self.on_enter(event,image_type='meat'))
+        self.image_label_frame2.bind('<Leave>',lambda event:self.on_leave(event,image_type='meat'))
 
         self.image_label_frame3 = Label(
-            self.background_frame3,image=image_name3,borderwidth=1,relief=SOLID
+            self.background_frame3,image=image_name3,borderwidth=1,relief=SOLID,text=""
             )
         self.image_label_frame3.grid(padx=0,pady=3,row=3, column=2)
+        self.image_label_frame3.bind('<Enter>',lambda event:self.on_enter(event,image_type='garnish'))
+        self.image_label_frame3.bind('<Leave>',lambda event:self.on_leave(event,image_type='garnish'))
 
         # Ordering Menu labels
         self.bread_label = Label(
@@ -154,8 +163,9 @@ class Order:
 
         # 2nd frame labels, entry box and buttons
         self.error_label = Label(
-            self.background_frame4,bg=light_red,text="",
-            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=5
+            self.background_frame4,bg=light_red,text=info,
+            font=sub_head_courier,borderwidth=1,relief=SOLID,width=17,height=5,
+            justify=LEFT
             )
         self.error_label.grid(padx=3,pady=5)
 
@@ -226,7 +236,7 @@ class Order:
                     total_price += float(prices[i])
                     self.total_label.configure(text=f"Total: ${total_price:.2f}")
                     self.disable_calc()
-                    self.error_label.configure(text="")
+                    self.error_label.configure(text=info)
 
                 except KeyError: # Will verify if the combo-boxes are empty and will set the total to 0 and remove everything from the list
                     self.error_label.configure(text="Please Select\nAn Order First",justify=LEFT)
@@ -257,12 +267,30 @@ class Order:
             self.list_label1.configure(text=self.ingredient_list,justify=LEFT)
             total_price = 0
             self.total_label.configure(text=f"Total: ${total_price:.2f}")
-            self.error_label.configure(text=f"",justify=LEFT)
+            self.error_label.configure(text=info,justify=LEFT)
 
         except: # This will put an error message to the user if it encountered an error
             self.error_label.configure(text=f"Can't reset\n{order_type.title()} order",justify=LEFT)
             self.disable_proc()
 
+
+    def on_enter(self,event,image_type):
+        '''This method will change the image to the menu after the user hover on it'''
+        if image_type == 'bread':
+            self.image_label_frame1.config(image=bread_menu_image)
+        elif image_type == 'meat':
+            self.image_label_frame2.config(image=meat_menu_image)
+        elif image_type == 'garnish':
+            self.image_label_frame3.config(image=garnish_menu_image)
+    
+    def on_leave(self,event,image_type):
+        '''This method will change the image back after the user stop hover on it'''
+        if image_type == 'bread':
+            self.image_label_frame1.config(image=image_name1)
+        elif image_type == 'meat':
+            self.image_label_frame2.config(image=image_name2)
+        elif image_type == 'garnish':
+            self.image_label_frame3.config(image=image_name3)
 
 # Main Program
 
@@ -273,13 +301,21 @@ window3.configure(bg=light_peach)
 window3.geometry("700x418")
 window3.resizable(0,0)
 
-# Loads the image first to use later
-image1 = "images\Hamito.gif"
-image_name1 = PhotoImage(file=image1)
-image2 = "images\Todo.gif"
-image_name2 = PhotoImage(file=image2)
-image3 = "images\Yuji.gif"
-image_name3 = PhotoImage(file=image3)
+# Loads the image to add in the order interface
+bread_image = "images\Hamito.gif"
+image_name1 = PhotoImage(file=bread_image)
+meat_image = "images\Todo.gif"
+image_name2 = PhotoImage(file=meat_image)
+garnish_image = "images\Yuji.gif"
+image_name3 = PhotoImage(file=garnish_image)
+
+# Loads the images for the hover menu
+bread_menu = "images\menu_bread.gif"
+bread_menu_image = PhotoImage(file=bread_menu)
+meat_menu = "images\menu_meat.gif"
+meat_menu_image = PhotoImage(file=meat_menu)
+garnish_menu = "images\menu_garnish.gif"
+garnish_menu_image = PhotoImage(file=garnish_menu)
 
 # Call the class
 Order()
