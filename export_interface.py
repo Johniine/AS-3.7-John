@@ -9,6 +9,7 @@ Version 4: Created a GUI for the export interface
 """
 # Imports
 from tkinter import *
+import datetime
 
 # info text
 info = """
@@ -21,8 +22,12 @@ info = """
  3. Order the sandwich you made
 """
 
-# files
-RECEIPT_NAME = "receipts\orders-receipt.txt"
+# Date and time to name the files
+date = datetime.datetime.now()
+current_date = f"{date.strftime('%d-%m-%Y')}"
+
+# Folder to add the created files
+FOLDER_NAME = "receipts"
 
 # Constant
 SANDWICH_NAME_LENGTH = 25
@@ -44,8 +49,13 @@ header_courier = ("Courier", 20, "bold")
 sub_head_courier = ("Courier", 12, "bold")
 info_courier = ("Courier", 10, "bold")
 
-# Class
+# Ingredient list
+ingredient_list = ""
 
+# Total
+total = 0
+
+# Class
 class Export:
     def __init__(self) -> None:
         # Background frames
@@ -170,16 +180,27 @@ class Export:
             self.amount_boundary()
     
     def amount_boundary(self):
-        """Thie method check if the user exceeded the order boundary of 10"""
+        """This method check if the user exceeded the set order boundary"""
         try:
             self.order_amount = int(self.number_entry.get())
             if self.order_amount > AMOUNT_BOUNDARY:
                 self.error_label.configure(text=f"The ordered amount\nOf {self.order_amount} has exceeded\nThe order limit of {AMOUNT_BOUNDARY}")
             elif self.order_amount <= 0:
                 self.error_label.configure(text=f"You must atleast\nOrder 1 Sandwich")
+            elif self.order_amount > 0 and self.order_amount <= AMOUNT_BOUNDARY:
+                self.export_to_folder()
         except ValueError:
-            self.error_label.configure(text=f"Enter Number\nOnly When Entering\nSandwich Quantity")
-        
+            self.error_label.configure(text=f"Please Enter A\nNumber In\nThe Sandwich Box")
+    
+    def export_to_folder(self):
+        """This method import the order into a file and put it in a folder"""
+        self.user_info = f"Sandwich Name: {self.sandwich_name.get()}\nName: {self.name_entry.get()}\nItems:\n{ingredient_list}\nQuantity: {self.number_entry.get()}\nTotal: ${total*int(self.number_entry.get()):.2f}"
+
+        self.sandwich_file_name = self.sandwich_name.get().replace(" ","-").lower().rstrip().lstrip()
+        self.file_path = f"{FOLDER_NAME}\{self.sandwich_file_name}-{current_date}.txt"
+        with open(self.file_path, "w") as file:
+            file.write(f"{self.user_info}")
+        self.error_label.configure(text=f"Order Succesfull\nPlease Look In The\nReceipt Folder")
 
 # Main Program
 
