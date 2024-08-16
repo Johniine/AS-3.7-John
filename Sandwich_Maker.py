@@ -640,13 +640,13 @@ window1.geometry("503x418")
 window1.resizable(0, 0)
 
 # Loads the image to add in the order interface
-start_image = "images\HSImage2.gif"
+start_image = "images\start_image.gif"
 image_name = PhotoImage(file=start_image)
-bread_image = "images\Hamito.gif"
+bread_image = "images\lbread_image.gif"
 image_name1 = PhotoImage(file=bread_image)
-meat_image = "images\Todo.gif"
+meat_image = "images\meat_image.gif"
 image_name2 = PhotoImage(file=meat_image)
-garnish_image = "images\Yuji.gif"
+garnish_image = "images\garnish_image.gif"
 image_name3 = PhotoImage(file=garnish_image)
 
 # Loads the images for the hover menu
