@@ -6,7 +6,9 @@ Version 1: Created a GUI for the starting interface
 Version 2: Created a GUI for the ordering interface
 Version 3: Created a GUI for the help interface
 Version 4: Created the GUI for the export interface
-Version 5: Changed the GUI for ordering interface 
+Version 5: Changed the GUI for ordering interface
+Version 6: Completed the export OOP and GUI
+Version 7: Completed the whole program and added comments
 """
 
 # Imports
@@ -389,7 +391,7 @@ class Order:
             self.error_label.configure(text=f"Can't reset\n{order_type.title()} order", justify=LEFT)
             self.disable_proc()
 
-
+    # These are the hovering effects for the menu images
     def on_enter(self, event, image_type):
         """This method will change the image to the menu after the user hover on it"""
         if image_type == 'bread':
@@ -509,16 +511,17 @@ class Export:
             "name": len(self.name_entry.get()),
             "address": len(self.address_entry.get())
         }
-        
+        # Added the input of the user in a dictionary and len them to get the character length
         limit = {
             "sandwich name": SANDWICH_NAME_LENGTH,
             "name": NAME_LENGTH,
             "address": ADDRESS_LENGTH
         }
+        # Added the limit to the dictionary to be used later
 
         self.length_checker = [] # I will append True or False in this list to be able to use using the add function
 
-        for keys in length:
+        for keys in length: # Check if the user input is less than or more than the character limit
             if length[keys] > limit[keys]:
                 self.error_label.configure(text=f"{keys.title()}\nhas reached\nThe character\nlimit Of {limit[keys]}",justify=LEFT)
                 self.length_checker.append(False)
@@ -533,10 +536,10 @@ class Export:
             self.error_label.configure(text="")
             self.amount_boundary()
     
-    def amount_boundary(self):
+    def amount_boundary(self): # This validate the input the user type in the sandwich quantity box
         """This method check if the user exceeded the set order boundary"""
         try:
-            self.order_amount = int(self.number_entry.get())
+            self.order_amount = int(self.number_entry.get().strip())
             if self.order_amount > AMOUNT_BOUNDARY:
                 self.error_label.configure(text=f"The ordered amount\nOf {self.order_amount} has exceeded\nThe order limit of {AMOUNT_BOUNDARY}")
             elif self.order_amount <= 0:
@@ -544,19 +547,23 @@ class Export:
             elif self.order_amount > 0 and self.order_amount <= AMOUNT_BOUNDARY:
                 self.export_to_folder()
         except ValueError:
-            self.error_label.configure(text=f"Please Enter A\nNumber In\nThe Sandwich Box")
+            self.error_label.configure(text=f"Please Enter A\nNumber In The\nSandwich Quantity Box")
     
-    def export_to_folder(self):
+    def export_to_folder(self): # This method export it the order to a specific folder and name it base on the sandwich name and the current date
         """This method import the order into a file and put it in a folder"""
         self.user_info = f"""=====\nSandwich Name: {self.sandwich_name.get()}\nName: {self.name_entry.get()}\n=====\nItems:
-        \n{ingredient_list}=====\nQuantity: {self.number_entry.get()}\ntotal_price: ${total_price*int(self.number_entry.get()):.2f}\n=====""" # This add a little design to the receipt
+        \n{ingredient_list}=====\nTotal: {total_price}\nQuantity: {self.number_entry.get()}\nTotal price: ${total_price*int(self.number_entry.get()):.2f}\n=====""" # This add a little design to the receipt
 
         self.sandwich_file_name = self.sandwich_name.get().replace(" ","-").lower().rstrip().lstrip()
         self.file_path = f"{FOLDER_NAME}\{self.sandwich_file_name}-{current_date}.txt"
         with open(self.file_path, "w") as file:
             file.write(f"{self.user_info}")
+        
+        # Put a message to the user to let them know that their order is succesful while also disabling the export button to make sure they will not be able to spam them
         self.error_label.configure(text=f"Order Succesfull\nPlease Look In The\nReceipt Folder")
         self.export_button.configure(state=DISABLED)
+        
+        # Change the back button to make it exit the program which take the user to the starting interface
         self.back_button.configure(text="Exit")
         self.back_button.configure(command=exit_export)
         self.list_label2.configure(text=f"{ingredient_list}\nQuantity: {self.number_entry.get()}\nTotal: ${total_price*int(self.number_entry.get()):.2f}")
@@ -584,6 +591,7 @@ def close_export():
     window4.withdraw()
 
 def exit_export():
+    """This will take the user from export to starting interface"""
     global ingredient_list, total_price, customers_order
 
     window1.deiconify()
