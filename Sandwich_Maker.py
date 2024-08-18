@@ -9,6 +9,7 @@ Version 4: Created the GUI for the export interface
 Version 5: Changed the GUI for ordering interface
 Version 6: Completed the export OOP and GUI
 Version 7: Completed the whole program and added comments
+Version 8: Bug Fixes
 """
 
 # Imports
@@ -360,12 +361,12 @@ class Order:
             if order_type == "bread": # This will reset the bread combo-box and the selected bread in the list
                 self.customers_order.remove(self.chosen_bread.get())
                 self.chosen_bread.set("")
-                self.combobox_bread.configure(state=ACTIVE)
+                self.combobox_bread.configure(state="readonly")
             
             elif order_type == "meat": # This will reset the meat combo-box and the selected meat in the list
                 self.customers_order.remove(self.chosen_meat1.get())
                 self.chosen_meat1.set("")
-                self.combobox_meat1.configure(state=ACTIVE)
+                self.combobox_meat1.configure(state="readonly")
             
             elif order_type == "garnish": # This will reset the garnish combo-box and the selected garnish in the list
                 self.customers_order.remove(self.combobox_garnish1.get())
@@ -377,8 +378,8 @@ class Order:
                     self.customers_order.remove(self.chosen_garnish2.get())
                     self.chosen_garnish2.set("")
                 
-                self.combobox_garnish1.configure(state=ACTIVE)
-                self.combobox_garnish2.configure(state=ACTIVE)
+                self.combobox_garnish1.configure(state="readonly")
+                self.combobox_garnish2.configure(state="readonly")
 
             self.disable_proc()
             self.ingredient_list = "".join([str(f"{items}\n") for items in self.customers_order])
@@ -554,7 +555,7 @@ class Export:
         self.user_info = f"""=====\nSandwich Name: {self.sandwich_name.get()}\nName: {self.name_entry.get()}\n=====\nItems:
         \n{ingredient_list}=====\nTotal: {total_price}\nQuantity: {self.number_entry.get()}\nTotal price: ${total_price*int(self.number_entry.get()):.2f}\n=====""" # This add a little design to the receipt
 
-        self.sandwich_file_name = self.sandwich_name.get().replace(" ","-").lower().rstrip().lstrip()
+        self.sandwich_file_name = self.sandwich_name.get().rstrip().lstrip().replace(" ","-").lower()
         self.file_path = f"{FOLDER_NAME}\{self.sandwich_file_name}-{current_date}.txt"
         with open(self.file_path, "w") as file:
             file.write(f"{self.user_info}")
